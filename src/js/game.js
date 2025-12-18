@@ -1,18 +1,28 @@
-import Archer from './Archer';
-import Warrior from './Warrior';
-import Mage from './Mage';
-import Dwart from './Dwart';
-import Crossbowman from './Crossbowman';
-import Demourge from './Demourge';
+export default function play(players) {
+  let round = 0;
+  
+  while (players.filter(p => !p.isDead()).length > 1) {
+    round++;
+    console.log(`--- Раунд ${round} ---`);
+    
+    for (const player of players) {
+      if (player.isDead()) continue;
+      player.turn(players);
+    }
+    
+    players.forEach(p => {
+      if (!p.isDead()) {
+        console.log(`${p.name} (${p.description}): Life ${p.life.toFixed(1)}, Weapon: ${p.weapon.name}`);
+      }
+    });
+  }
 
-export default function play() {
-  const characters = [
-    new Archer(),
-    new Warrior(),
-    new Mage(),
-    new Dwart(),
-    new Crossbowman(),
-    new Demourge(),
-  ];
-  console.log(characters);
+  const winner = players.find(p => !p.isDead());
+  if (winner) {
+    console.log(`Победитель: ${winner.name} (${winner.description})!`);
+  } else {
+    console.log('Все погибли...');
+  }
+  
+  return winner;
 }
